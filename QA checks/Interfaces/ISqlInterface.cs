@@ -10,8 +10,7 @@ namespace QA_checks.Interfaces
         Task<Order> GetOrderByNumAsync(long ordersNumber);
         Task UpdateOrderAsync(Order order);
         Task AddQAcheckAsync(QAchecks qAcheks);
+        Task<IEnumerable<QAchecks>> GetQAchecksAsync(long ordersNumber);
         Task SaveAsync();
-        bool Checking(long ordersNumber);
-        bool ReturnTuple(int value, string comment);
     }
 }

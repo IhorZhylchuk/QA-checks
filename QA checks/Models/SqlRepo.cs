@@ -32,8 +32,11 @@ namespace QA_checks.Models
             qChecks.OrdersNumber = qAchecks.OrdersNumber;
             qChecks.TestWodny = qAchecks.TestWodny;
             qChecks.TestKomentarz = qAchecks.TestKomentarz;
+            qChecks.Ph = qAchecks.Ph;
             qChecks.OrderId = await _dbContext.Orders.Where(n => n.OrdersNumber == qAchecks.OrdersNumber).Select(i => i.Id).FirstAsync();
-            
+            qChecks.Date = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+
+
             await _dbContext.QAchecks.AddAsync(qChecks);
             await _dbContext.SaveChangesAsync();
 
@@ -78,26 +81,10 @@ namespace QA_checks.Models
             await _dbContext.SaveChangesAsync();
         }
 
-        public bool Checking(long ordersNumber)
+        public async Task<IEnumerable<QAchecks>> GetQAchecksAsync(long ordersNumber)
         {
-            var check = _dbContext.Orders.Select(n => n.OrdersNumber).Any(n => n == ordersNumber);
-            return check;
-        }
-        public bool ReturnTuple(int value, string comment)
-        {
-            Tuple<int, string> returnedTuple = new Tuple<int, string>(value, comment);
-            switch (returnedTuple.Item1)
-            {
-                case 002:
-                    if(returnedTuple.Item2 == "" || returnedTuple.Item2 == "string" || returnedTuple.Item2.Length < 10){
-                        return false; 
-                    } 
-                    else { return true; }
-                case 001:
-                    return true;
-                default: 
-                    return false;
-            }
+            return await _dbContext.QAchecks.Where(n => n.OrdersNumber == ordersNumber).ToListAsync();
+
         }
     }
 }

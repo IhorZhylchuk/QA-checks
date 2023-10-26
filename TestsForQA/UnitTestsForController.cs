@@ -307,5 +307,123 @@ namespace TestsForQA
 
         }
 
+        [Fact] 
+        public async Task CreateChecksAsync_Ok()
+        {
+            using (var db = new ApplicationDbContex(Options()))
+            {
+
+                SqlRepo _sqlRepo = new SqlRepo(db);
+                DefaultMethods defaultMethods = new DefaultMethods(db);
+                var mockMapper = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<QAchecks, DtoQaChecks>();
+                    cfg.CreateMap<DtoQaChecks, QAchecks>();
+                });
+                var mapper = mockMapper.CreateMapper();
+
+                var order = new Order { Id = 1, Count = 1000, OrdersName = "Sos krówka", OrdersNumber = 2999999 };
+                await _sqlRepo.CreateOrderAsync(order);
+
+                var check = new QAchecks()
+                {
+                    Id = 1,
+                    CiałaObce = 1,
+                    CiałaObceKomentarz = "",
+                    DataOpakowania = 1,
+                    DataOpakowaniaKomentarz = "",
+                    Date = DateTime.Now.Date.ToString(),
+                    Opakowanie = 1,
+                    OpakowanieKomentarz = "",
+                    Ekstrakt = 45,
+                    Lepkość = 5002,
+                    MetalDetektor = 1,
+                    MetalDetektorKomentarz = "",
+                    OrderId = 1,
+                    OrdersNumber = 2999999,
+                    Pasteryzacja = 1,
+                    PasteryzacjaKomentarz = "",
+                    Ph = 6,
+                    Receptura = 1,
+                    RecepturaKomentarz = "",
+                    Temperatura = 55,
+                    TestKomentarz = "",
+                    TestWodny = 1
+                };
+
+                IWebHostEnvironment hostingEnvironment = new Mock<IWebHostEnvironment>().Object;
+
+                QAchecksController controller = new QAchecksController(_sqlRepo, mapper, hostingEnvironment, defaultMethods);
+
+                var result = await controller.CreateChecksAsync(mapper.Map<DtoQaChecks>(check));
+
+                var returnedCheck = await _sqlRepo.GetQAchecksAsync(check.OrdersNumber);
+
+                Assert.NotNull(result);
+                Assert.IsAssignableFrom<ActionResult<DtoQaChecks>>(result);
+                Assert.IsType<OkObjectResult>(result.Result);
+                Assert.IsType<List<QAchecks>>(returnedCheck.ToList());
+                Assert.True(returnedCheck.ToList().Count() > 0);
+
+                await db.Database.EnsureDeletedAsync();
+            }
+
+        }
+
+        [Fact]
+        public async Task CreateChecksAsync_BadRequest()
+        {
+            using (var db = new ApplicationDbContex(Options()))
+            {
+                SqlRepo _sqlRepo = new SqlRepo(db);
+                DefaultMethods defaultMethods = new DefaultMethods(db);
+                var mockMapper = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<QAchecks, DtoQaChecks>();
+                    cfg.CreateMap<DtoQaChecks, QAchecks>();
+                });
+                var mapper = mockMapper.CreateMapper();
+
+                var check = new QAchecks()
+                {
+                    Id = 1,
+                    CiałaObce = 1,
+                    CiałaObceKomentarz = "",
+                    DataOpakowania = 1,
+                    DataOpakowaniaKomentarz = "",
+                    Date = DateTime.Now.Date.ToString(),
+                    Opakowanie = 1,
+                    OpakowanieKomentarz = "",
+                    Ekstrakt = 45,
+                    Lepkość = 5002,
+                    MetalDetektor = 1,
+                    MetalDetektorKomentarz = "",
+                    OrderId = 1,
+                    OrdersNumber = 2999999,
+                    Pasteryzacja = 1,
+                    PasteryzacjaKomentarz = "",
+                    Ph = 6,
+                    Receptura = 1,
+                    RecepturaKomentarz = "",
+                    Temperatura = 55,
+                    TestKomentarz = "",
+                    TestWodny = 1
+                };
+
+                IWebHostEnvironment hostingEnvironment = new Mock<IWebHostEnvironment>().Object;
+
+                QAchecksController controller = new QAchecksController(_sqlRepo, mapper, hostingEnvironment, defaultMethods);
+
+                var result = await controller.CreateChecksAsync(mapper.Map<DtoQaChecks>(check));
+
+                var returnedCheck = await _sqlRepo.GetQAchecksAsync(check.OrdersNumber);
+
+                Assert.IsType<BadRequestObjectResult>(result.Result);
+                Assert.True(returnedCheck.ToList().Count() == 0);
+
+                await db.Database.EnsureDeletedAsync();
+            }
+
+        }
     }
 }

@@ -161,7 +161,7 @@ namespace QA_checks.Controllers
         }
 
         [HttpPost("QA checks")]
-        public async Task<ActionResult> CreateChecksAsync(DtoQaChecks qAChecks)
+        public async Task<ActionResult<DtoQaChecks>> CreateChecksAsync(DtoQaChecks qAChecks)
         {
             if (ModelState.IsValid)
             {

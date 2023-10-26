@@ -62,23 +62,19 @@ namespace QA_checks.Models
         public string TestKomentarz { get; set; } = string.Empty;
 
         [Required]
-        [MinValue(1)]
-        //[Range(100, 1000)]
+        [MinValue(0)]
         public float Lepkość { get; set; }
 
         [Required]
-        [MinValue(1)]
-       // [Range(1, 100)]
+        [MinValue(0)]
         public float Ekstrakt { get; set; }
 
         [Required]
-        [MinValue(1)]
-        //[Range(1, 100)]
+        [MinValue(0)]
         public float Ph { get; set; }
 
         [Required]
-        [MinValue(1)]
-        //[Range(1, 100)]
+        [MinValue(0)]
         public float Temperatura { get; set; }
 
         [Required]

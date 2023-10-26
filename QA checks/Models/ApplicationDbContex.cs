@@ -6,7 +6,6 @@ namespace QA_checks.Models
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<QAchecks> QAchecks { get; set; }
-       // public DbSet<QAtest> qAtests { get; set; }
         public ApplicationDbContex(DbContextOptions<ApplicationDbContex> dbContext) : base(dbContext)
         {
 

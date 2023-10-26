@@ -16,6 +16,7 @@ using System.Reflection.Metadata;
 
 namespace QA_checks.Controllers
 {
+    [Route("api/controller")]
     [ApiController]
     public class QAchecksController : ControllerBase
     {
@@ -31,7 +32,7 @@ namespace QA_checks.Controllers
             _hostingEnvironment = hostingEnvironment;
             _defaultMethods = defaultMethods;   
         }
-        [HttpPost("Create order")]
+        [HttpPost("CreateOrder")]
         public async Task<ActionResult<DtoOrderModel>> CreateOrderAsync(DtoOrderModel order)
         {
             if (ModelState.IsValid)
@@ -58,7 +59,7 @@ namespace QA_checks.Controllers
             }
             return NotFound("Please, enter correct values!");
         }
-        [HttpGet("List of orders")]
+        [HttpGet("AllOrders")]
         public async Task<ActionResult<IEnumerable<DtoOrderModel>>> GetAllOrdersAsync()
         {
             try
@@ -72,7 +73,7 @@ namespace QA_checks.Controllers
                 return NotFound("Some exception occured - " + ex.Message.ToString());
             }
         }
-        [HttpGet("Get order")]
+        [HttpGet("GetOrder")]
         public async Task<ActionResult<DtoOrderModel>> GetOrderByNumAsync(long ordersNumber)
         {
             if (ordersNumber != 0)
@@ -90,7 +91,7 @@ namespace QA_checks.Controllers
             }
             return NotFound("Please, make sure the order exist or the order's number is correct!");
         }
-        [HttpPut("Update order")]
+        [HttpPut("UpdateOrder")]
         public async Task<ActionResult<DtoOrderModel>> OrdersUpdateAsync(long ordersNumber, [FromBody] DtoUpdateOrderModel dtoOrder)
         {
             if (ModelState.IsValid && ordersNumber != 0)
@@ -112,7 +113,7 @@ namespace QA_checks.Controllers
             }
             return BadRequest("Please, make sure you entered correct values!");
         }
-        [HttpPatch("Partial order's update")]
+        [HttpPatch("PartialUpdate")]
         public async Task<ActionResult<DtoOrderModel>> OrdersPartialUpdateAsync(long ordersNumber, JsonPatchDocument<DtoOrderModel> json)
         {
             if (ordersNumber != 0)
@@ -140,7 +141,7 @@ namespace QA_checks.Controllers
             return BadRequest("Please, make sure you entered correct values!");
         }
 
-        [HttpDelete ("Delete order")]
+        [HttpDelete ("DeleteOrder")]
         public async Task<ActionResult> DeleteOrderAsync(long ordersNumber)
         {
             if(ordersNumber != 0)
@@ -160,7 +161,7 @@ namespace QA_checks.Controllers
             return NotFound("Please, make sure you entered correct 'ordersNumber'");
         }
 
-        [HttpPost("QA checks")]
+        [HttpPost("CreateCheck")]
         public async Task<ActionResult<DtoQaChecks>> CreateChecksAsync(DtoQaChecks qAChecks)
         {
             if (ModelState.IsValid)
@@ -208,7 +209,7 @@ namespace QA_checks.Controllers
             }
             return BadRequest("Please, make sure you entered correct values or filled all necessary fields!");
         }
-        [HttpGet ("Generate pdf")]
+        [HttpGet ("GeneratePDF")]
         public ActionResult GeneretaPdfFile(long ordersNumber)
         {
             try

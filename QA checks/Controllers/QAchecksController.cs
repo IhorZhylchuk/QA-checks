@@ -208,7 +208,7 @@ namespace QA_checks.Controllers
             }
             return BadRequest("Please, make sure you entered correct values or filled all necessary fields!");
         }
-        [HttpGet ("Generate tests")]
+        [HttpGet ("Generate pdf")]
         public ActionResult GeneretaPdfFile(long ordersNumber)
         {
             try
